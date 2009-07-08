@@ -17,7 +17,8 @@ use Catalyst::Test 'TestApp';
 sub req_with_base {
     my $base = shift;
 
-    my ($res, $c) = ctx_request(GET('/'));
+    my ($res, $c) = ctx_request(GET('http://localhost/',
+        'X-Request-Base' => $base ));
     return $c;
 }
 

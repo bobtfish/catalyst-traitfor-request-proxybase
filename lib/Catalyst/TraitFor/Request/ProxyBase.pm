@@ -1,15 +1,32 @@
 package Catalyst::TraitFor::Request::ProxyBase;
 use Moose::Role;
+use URI ();
 use namespace::autoclean;
 
-requires 'base';
+our $VERSION = '0.000001';
+
+requires qw/
+    base
+    secure
+/;
 
 around 'base' => sub {
     my ($orig, $self, @args) = @_;
-    my $ret = $self->$orig(@args);
-    warn blessed $ret;
-    # FIXME - Mangle here.
-    return $ret;
+    if (scalar @args) {
+        if (my $base = $self->header('X-Request-Base')) {
+            $base .= '/' unless $base =~ m|/$|;
+            @args = (URI->new($base));
+        }
+    }
+    $self->$orig(@args);
+};
+
+around 'secure' => sub {
+    my ($orig, $self, @args) = @_;
+    if (my $base = $self->header('X-Request-Base')) {
+        return URI->new($base)->scheme eq 'http' ? 0 : 1;
+    }
+    $self->$orig(@args);
 };
 
 1;
@@ -35,7 +52,6 @@ Catalyst::TraitFor::Request::ProxyBase -
         Catalyst::TraitFor::Request::ProxyBase
     /);
 
-    __PACKAGE__->config( using_frontend_proxy => 1 );
     __PACKAGE__->setup;
 
 =head1 DESCRIPTION
@@ -51,8 +67,7 @@ do enough)
 This creates an issue for someone wanting to deploy the same cluster of
 application servers behind various URI endpoints.
 
-Using this module, with the C<< using_frontend_proxy >> configuration
-directive activates it's behavior. The request base (C<< $c->req->base >>)
+Using this module, the request base (C<< $c->req->base >>)
 is replaced with the contents of the C<< X-Request-Base >> header,
 which is expected to be a full URI, for example:
 
@@ -69,13 +84,19 @@ C<< $c->uri_for >>.
 
 =item base
 
+=item secure
+
 =back
 
 =head1 WRAPPED METHODS
 
-=head2 base
+=over
 
-FIXME
+=item base
+
+=item secure
+
+=back
 
 =head1 BUGS
 
