@@ -1,3 +1,4 @@
+^Catalyst-TraitFor-Request-ProxyBase
 .gitignore
 .git/
 blib
