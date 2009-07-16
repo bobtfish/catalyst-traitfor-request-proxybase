@@ -1,5 +1,6 @@
 NAME
-    Catalyst::TraitFor::Request::ProxyBase -
+    Catalyst::TraitFor::Request::ProxyBase - Replace request base with value
+    passed by HTTP proxy
 
 SYNOPSIS
         package MyApp;
