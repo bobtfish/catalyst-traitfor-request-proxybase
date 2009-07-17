@@ -2,6 +2,12 @@ use strict;
 use warnings;
 use inc::Module::Install 0.91;
 
+BEGIN {
+    if ($Module::Install::AUTHOR) {
+        require Module::Install::AuthorTests;
+    }
+}
+
 name 'Catalyst-TraitFor-Request-ProxyBase';
 all_from 'lib/Catalyst/TraitFor/Request/ProxyBase.pm';
 
@@ -16,6 +22,8 @@ test_requires 'HTTP::Request::Common';
 
 resources repository => 'http://github.com/bobtfish/catalyst-traitfor-request-proxybase';
 license 'perl';
+
+author_tests('t/author');
 
 WriteAll();
 
