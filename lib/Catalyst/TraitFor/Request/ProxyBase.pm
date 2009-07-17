@@ -3,7 +3,7 @@ use Moose::Role;
 use URI ();
 use namespace::autoclean;
 
-our $VERSION = '0.000002';
+our $VERSION = '0.000003';
 
 requires qw/
     base

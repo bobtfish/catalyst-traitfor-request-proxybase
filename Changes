@@ -1,3 +1,7 @@
+0.000003
+
+ - Update POD, include one line summary in Name
+
 0.000002
 
  - Always apply the Request base to $c->req->base, not just on assignment.
