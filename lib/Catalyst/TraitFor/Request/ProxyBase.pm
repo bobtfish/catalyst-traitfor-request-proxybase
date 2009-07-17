@@ -3,7 +3,7 @@ use Moose::Role;
 use URI ();
 use namespace::autoclean;
 
-our $VERSION = '0.000001';
+our $VERSION = '0.000002';
 
 requires qw/
     base
@@ -12,11 +12,9 @@ requires qw/
 
 around 'base' => sub {
     my ($orig, $self, @args) = @_;
-    if (scalar @args) {
-        if (my $base = $self->header('X-Request-Base')) {
-            $base .= '/' unless $base =~ m|/$|;
-            @args = (URI->new($base));
-        }
+    if (my $base = $self->header('X-Request-Base')) {
+        $base .= '/' unless $base =~ m|/$|;
+        @args = (URI->new($base));
     }
     $self->$orig(@args);
 };
