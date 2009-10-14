@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use HTTP::Request::Common;
-use Test::More tests => 9;
+use Test::More tests => 12;
 
 # setup library path
 use FindBin qw($Bin);
@@ -17,7 +17,7 @@ use Catalyst::Test 'TestApp';
 sub req_with_base {
     my $base = shift;
 
-    my ($res, $c) = ctx_request(GET('http://localhost/',
+    my ($res, $c) = ctx_request(GET(shift || 'http://localhost/',
         'X-Request-Base' => $base ));
     return $c;
 }
@@ -40,7 +40,7 @@ is(req_with_base('https://example.com:445/some/path/')->req->uri->path,
     '/some/path/');
 is(req_with_base('https://example.com:445/some/path/', 'http://localhost/chickens')->req->uri->path,
     '/some/path/chickens');
-exit;
+
 ok req_with_base('https://example.com:80/')->req->secure;
 ok !req_with_base('http://example.com:443/')->req->secure;
 

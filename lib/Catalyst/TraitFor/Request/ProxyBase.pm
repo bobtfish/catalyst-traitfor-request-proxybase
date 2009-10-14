@@ -24,8 +24,9 @@ around 'uri' => sub {
     my $uri = $self->$orig(@args)->clone;
     if (my $base = $self->header('X-Request-Base')) {
       my $proxy_uri = URI->new( $base );
-      $uri->scheme( $proxy_uri->scheme );
+      $uri->scheme( $proxy_uri->scheme );      
       my $new_path = $proxy_uri->path . $uri->path;
+      $new_path =~ s|//|/|g;
       $uri->path( $new_path );
     }
     return $uri;
