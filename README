@@ -41,6 +41,9 @@ DESCRIPTION
     This value will then be used as the base for uris constructed by
     "$c->uri_for".
 
+    In addition the request uri ("$c->req->uri") will reflect the scheme and
+    path specifed in the header.
+
 REQUIRED METHODS
     base
     secure

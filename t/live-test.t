@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use HTTP::Request::Common;
-use Test::More tests => 12;
+use Test::More;
 
 # setup library path
 use FindBin qw($Bin);
@@ -43,4 +43,6 @@ is(req_with_base('https://example.com:445/some/path/', 'http://localhost/chicken
 
 ok req_with_base('https://example.com:80/')->req->secure;
 ok !req_with_base('http://example.com:443/')->req->secure;
+
+done_testing;
 
