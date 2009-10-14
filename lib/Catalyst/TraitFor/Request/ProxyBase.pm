@@ -3,7 +3,7 @@ use Moose::Role;
 use URI ();
 use namespace::autoclean;
 
-our $VERSION = '0.000003';
+our $VERSION = '0.000004';
 
 requires qw/
     base
@@ -17,6 +17,15 @@ around 'base' => sub {
         @args = (URI->new($base));
     }
     $self->$orig(@args);
+};
+
+around 'uri' => sub {
+    my ($orig, $self, @args) = @_;
+    my $uri = $self->$orig(@args);
+    if ($self->secure && ($uri->scheme ne 'https')) {
+      $uri->scheme('https');
+    }
+    return $uri;
 };
 
 around 'secure' => sub {

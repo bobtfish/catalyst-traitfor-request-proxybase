@@ -34,6 +34,10 @@ is(req_with_base('https://example.com:445/some/path')->res->body,
     'https://example.com:445/some/path/');
 is(req_with_base('https://example.com:445/some/path/')->res->body,
     'https://example.com:445/some/path/');
+is(req_with_base('https://example.com:445/some/path/')->req->uri->scheme,
+    'https');
+is(req_with_base('https://example.com:445/some/path/')->req->uri->path,
+    '/some/path');
 
 ok req_with_base('https://example.com:80/')->req->secure;
 ok !req_with_base('http://example.com:443/')->req->secure;
