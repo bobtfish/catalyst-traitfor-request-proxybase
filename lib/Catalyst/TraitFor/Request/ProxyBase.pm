@@ -4,6 +4,7 @@ use URI ();
 use namespace::autoclean;
 
 our $VERSION = '0.000004';
+$VERSION = eval $VERSION;
 
 requires qw/
     base
