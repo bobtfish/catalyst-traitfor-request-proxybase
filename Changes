@@ -1,3 +1,7 @@
+0.000004
+
+ - Apply the specified path and scheme to $c->req->uri, update POD.
+
 0.000003
 
  - Update POD, include one line summary in Name

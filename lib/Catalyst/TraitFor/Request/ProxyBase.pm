@@ -89,6 +89,8 @@ which is expected to be a full URI, for example:
 This value will then be used as the base for uris constructed by
 C<< $c->uri_for >>.
 
+In addition the request uri (C<< $c->req->uri >>) will reflect the scheme and path specifed in the header.
+
 =head1 REQUIRED METHODS
 
 =over
