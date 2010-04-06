@@ -49,6 +49,7 @@ is(req_with_base('/preview','https://example.com:443')->res->body, 'https://exam
 
     is( $c->req->base, "http://example.com/preview/" );
     is( $c->uri_for('/more'), "http://example.com/preview/more" );
+    is( $c->uri_for('more'), "http://example.com/preview/more" );
     is( $c->uri_for('/more//double'), "http://example.com/preview/more//double" );
 }
 
