@@ -13,15 +13,13 @@ requires qw/
 
 sub _with_scheme { return $_[0] =~ m/^https?/; }
 
-has '+base' => (
-    predicate => '_has_base',
-);
-
 around 'base' => sub {
     my ($orig, $self, @args) = @_;
 
-    if ( $self->_has_base() && @args == 0 ) {
-        return $self->$orig(@args);
+	my $isset = $self->meta->find_attribute_by_name('base')->has_value($self);
+
+    if ( $isset && @args == 0 ) {
+		return $self->$orig(@args);
     }
     else {
         if (my $base = $self->header('X-Request-Base')) {
@@ -32,7 +30,7 @@ around 'base' => sub {
             else {
                 my $proxy_base = $self->$orig(@args)->clone();
                 $proxy_base->path( $base . $proxy_base->path() );
-                return $proxy_base;
+                @args = ( $proxy_base );
             }
         }
     }
@@ -41,6 +39,12 @@ around 'base' => sub {
 
 around 'uri' => sub {
     my ($orig, $self, @args) = @_;
+
+	my $isset = $self->meta->find_attribute_by_name('uri')->has_value($self);
+	if ( $isset && @args == 0 ) {
+		return $self->$orig(@args);
+	}
+
     my $uri = $self->$orig(@args)->clone;
 
     if ( my $base = $self->header('X-Request-Base') ) {
@@ -60,7 +64,8 @@ around 'uri' => sub {
             $uri->path( $base . $uri->path() );
         }
     }
-    return $uri;
+
+	return $self->$orig( ($uri) );
 };
 
 around 'secure' => sub {
