@@ -3,7 +3,7 @@ use Moose::Role;
 use URI ();
 use namespace::autoclean;
 
-our $VERSION = '0.000004';
+our $VERSION = '0.000005';
 $VERSION = eval $VERSION;
 
 requires qw/
@@ -11,11 +11,30 @@ requires qw/
     secure
 /;
 
+sub _with_scheme { return $_[0] =~ m/^https?/; }
+
+has '+base' => (
+    predicate => '_has_base',
+);
+
 around 'base' => sub {
     my ($orig, $self, @args) = @_;
-    if (my $base = $self->header('X-Request-Base')) {
-        $base .= '/' unless $base =~ m|/$|;
-        @args = (URI->new($base));
+
+    if ( $self->_has_base() && @args == 0 ) {
+        return $self->$orig(@args);
+    }
+    else {
+        if (my $base = $self->header('X-Request-Base')) {
+            if (_with_scheme($base)) {
+                $base .= '/' unless $base =~ m|/$|;
+                @args = (URI->new($base));
+            }
+            else {
+                my $proxy_base = $self->$orig(@args)->clone();
+                $proxy_base->path( $base . $proxy_base->path() );
+                return $proxy_base;
+            }
+        }
     }
     $self->$orig(@args);
 };
@@ -23,12 +42,23 @@ around 'base' => sub {
 around 'uri' => sub {
     my ($orig, $self, @args) = @_;
     my $uri = $self->$orig(@args)->clone;
-    if (my $base = $self->header('X-Request-Base')) {
-      my $proxy_uri = URI->new( $base );
-      $uri->scheme( $proxy_uri->scheme );      
-      my $new_path = $proxy_uri->path . $uri->path;
-      $new_path =~ s|//|/|g;
-      $uri->path( $new_path );
+
+    if ( my $base = $self->header('X-Request-Base') ) {
+        if (_with_scheme($base)) {
+            my $proxy_uri = URI->new( $base );
+
+            
+            my $proxy_path = $proxy_uri->path;
+            my $orig_path  = $uri->path;
+
+            $proxy_path =~ s{/$}{} if $orig_path =~ m{^/};
+
+            $uri->scheme( $proxy_uri->scheme );      
+            $uri->path( $proxy_path . $orig_path );
+        }
+        else {
+            $uri->path( $base . $uri->path() );
+        }
     }
     return $uri;
 };
@@ -36,7 +66,9 @@ around 'uri' => sub {
 around 'secure' => sub {
     my ($orig, $self, @args) = @_;
     if (my $base = $self->header('X-Request-Base')) {
-        return URI->new($base)->scheme eq 'http' ? 0 : 1;
+        if (_with_scheme($base)) {
+            return URI->new($base)->scheme eq 'http' ? 0 : 1;
+        }
     }
     $self->$orig(@args);
 };
