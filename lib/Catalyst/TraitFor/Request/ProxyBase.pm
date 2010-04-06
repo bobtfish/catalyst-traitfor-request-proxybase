@@ -144,6 +144,24 @@ In addition the request uri (C<< $c->req->uri >>) will reflect the scheme and pa
 
 =back
 
+=head1 APACHE SETUP
+
+On the frontend Proxy Apache, you would want to enable a Virtualhost config
+somewhat like this. The backend apache config stays unchanged.
+
+    <Virtualhost *:80>
+        ProxyRequests Off
+
+        <Location /preview>
+            # You must have mod_headers enabled for that
+            # RequestHeader set X-Request-Base /preview
+            RequestHeader set X-Request-Base http://www.babilu.de/preview
+        </Location>
+
+        ProxyPass /preview http://my.vpn.host/
+        ProxyPassReverse /preview http://my.vpn.host/
+    </Virtualhost>
+
 =head1 BUGS
 
 Probably. Patches welcome, please fork from:
