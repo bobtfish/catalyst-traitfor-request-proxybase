@@ -3,8 +3,7 @@
 use strict;
 use warnings;
 use HTTP::Request::Common;
-#use Test::More;
-use Test::Most;
+use Test::More;
 
 # setup library path
 use FindBin qw($Bin);
@@ -19,8 +18,6 @@ sub req_with_base {
     my $base = shift;
 
     my $request_host = shift || 'http://localhost/';
-
-#    warn "BASE IN REQ is $base / $request_host";
 
     my ($res, $c) = ctx_request(GET($request_host, 'X-Request-Base' => $base ));
     return $c;
@@ -45,6 +42,16 @@ ok !req_with_base('http://example.com:443/')->req->secure;
 is(req_with_base('/preview','http://example.com:80')->res->body, 'http://example.com/preview/');
 is(req_with_base('/preview','https://example.com:80')->res->body, 'https://example.com/preview/');
 is(req_with_base('/preview','https://example.com:443')->res->body, 'https://example.com/preview/');
+
+
+{
+    my $c = req_with_base('http://example.com/preview/');
+
+    is( $c->req->base, "http://example.com/preview/" );
+    is( $c->uri_for('/more'), "http://example.com/preview/more" );
+    is( $c->uri_for('more'), "http://example.com/preview/more" );
+    is( $c->uri_for('/more//double'), "http://example.com/preview/more//double" );
+}
 
 done_testing;
 
