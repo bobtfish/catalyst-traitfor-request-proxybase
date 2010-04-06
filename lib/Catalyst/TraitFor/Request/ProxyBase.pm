@@ -160,7 +160,7 @@ somewhat like this. The backend apache config stays unchanged.
         <Location /preview>
             # You must have mod_headers enabled for that
             # RequestHeader set X-Request-Base /preview
-            RequestHeader set X-Request-Base http://www.babilu.de/preview
+            RequestHeader set X-Request-Base http://www.example.com/preview
         </Location>
 
         ProxyPass /preview http://my.vpn.host/
