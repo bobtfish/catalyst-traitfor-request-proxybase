@@ -179,6 +179,10 @@ and send a pull request.
 
 Tomas Doran (t0m) C<< <bobtfish@bobtfish.net> >>
 
+=head1 CONTRIBUTORS
+
+Klaus Ita (koki) C<< <klaus@worstofall.com> >>
+
 =head1 COPYRIGHT
 
 This module is Copyright (c) 2009 Tomas Doran and is licensed under the same

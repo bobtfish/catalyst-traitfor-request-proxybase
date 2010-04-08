@@ -1,3 +1,9 @@
+0.pending Wed Oct 14 12:04:02 BST 2009
+
+ - Call the heavy part code less often
+ - Fix // url rewrite bug
+ - Accept relative 'X-Request-Base' headers
+
 0.000004 Wed Oct 14 12:04:02 BST 2009
 
  - Apply the specified path and scheme to $c->req->uri, update POD.
