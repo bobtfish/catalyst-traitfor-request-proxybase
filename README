@@ -79,6 +79,9 @@ BUGS
 AUTHOR
     Tomas Doran (t0m) "<bobtfish@bobtfish.net>"
 
+CONTRIBUTORS
+    Klaus Ita (koki) "<klaus@worstofall.com>"
+
 COPYRIGHT
     This module is Copyright (c) 2009 Tomas Doran and is licensed under the
     same terms as perl itself.
