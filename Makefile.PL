@@ -20,7 +20,7 @@ test_requires 'CatalystX::RoleApplicator' => '0.005';
 test_requires 'Test::More' => '0.88';
 test_requires 'HTTP::Request::Common';
 
-resources repository => 'http://github.com/bobtfish/catalyst-traitfor-request-proxybase';
+resources repository => 'git://git.shadowcat.co.uk/catagits/Catalyst-TraitFor-Request-ProxyBase';
 license 'perl';
 
 author_tests('t/author');
