@@ -51,13 +51,12 @@ around 'uri' => sub {
         if (_with_scheme($base)) {
             my $proxy_uri = URI->new( $base );
 
-            
             my $proxy_path = $proxy_uri->path;
             my $orig_path  = $uri->path;
 
             $proxy_path =~ s{/$}{} if $orig_path =~ m{^/};
 
-            $uri->scheme( $proxy_uri->scheme );      
+            $uri->scheme( $proxy_uri->scheme );
             $uri->path( $proxy_path . $orig_path );
         }
         else {
@@ -175,7 +174,7 @@ Probably. Patches welcome, please fork from:
 
 and send a pull request.
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 Tomas Doran (t0m) C<< <bobtfish@bobtfish.net> >>
 
